@@ -1,7 +1,7 @@
 package jp.manse;
 
 import android.graphics.Color;
-import android.support.v4.view.ViewCompat;
+import androidx.core.view.ViewCompat;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.RelativeLayout;
