@@ -1,5 +1,9 @@
 # React Native Brightcove Player
 
+## Green Chilli Design / Milford implementation
+The original repo is outdated, and won't build on current Android SDK.
+The iOS build has been fixed in `raphael-blg/react-native-brightcove-player` so this fork is from their fork.
+
 <img src="https://user-images.githubusercontent.com/443965/58468251-2e0a5b00-8178-11e9-87b7-0acd15b750ba.jpg" width="500">
 
 - A React Native implementation of Brightcove Player SDK.
