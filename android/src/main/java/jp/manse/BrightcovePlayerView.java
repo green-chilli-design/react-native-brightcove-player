@@ -1,10 +1,11 @@
 package jp.manse;
 
 import android.graphics.Color;
-import androidx.core.view.ViewCompat;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.RelativeLayout;
+
+import androidx.core.view.ViewCompat;
 
 import com.brightcove.player.display.ExoPlayerVideoDisplayComponent;
 import com.brightcove.player.edge.Catalog;
@@ -55,7 +56,6 @@ public class BrightcovePlayerView extends RelativeLayout implements LifecycleEve
     private boolean playing = false;
     private int bitRate = 0;
     private float playbackRate = 1;
-    private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
 
     public BrightcovePlayerView(ThemedReactContext context, ReactApplicationContext applicationContext) {
         super(context);
@@ -255,46 +255,8 @@ public class BrightcovePlayerView extends RelativeLayout implements LifecycleEve
         if (player == null) return;
         MappingTrackSelector.MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
         if (mappedTrackInfo == null) return;
-        Integer rendererIndex = null;
-        for (int i = 0; i < mappedTrackInfo.length; i++) {
-            TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(i);
-            if (trackGroups.length != 0 && player.getRendererType(i) == C.TRACK_TYPE_VIDEO) {
-                rendererIndex = i;
-                break;
-            }
-        }
-
-        if (rendererIndex == null) return;
-        if (bitRate == 0) {
-            trackSelector.clearSelectionOverrides(rendererIndex);
-            return;
-        }
-        int resultBitRate = -1;
-        int targetGroupIndex = -1;
-        int targetTrackIndex = -1;
-        TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(rendererIndex);
-        for (int groupIndex = 0; groupIndex < trackGroups.length; groupIndex++) {
-            TrackGroup group = trackGroups.get(groupIndex);
-            if (group != null) {
-                for (int trackIndex = 0; trackIndex < group.length; trackIndex++) {
-                    Format format = group.getFormat(trackIndex);
-                    if (format != null && mappedTrackInfo.getTrackFormatSupport(rendererIndex, groupIndex, trackIndex)
-                            == RendererCapabilities.FORMAT_HANDLED) {
-                        if (resultBitRate == -1 ||
-                                (resultBitRate > bitRate ? (format.bitrate < resultBitRate) :
-                                        (format.bitrate <= bitRate && format.bitrate > resultBitRate))) {
-                            targetGroupIndex = groupIndex;
-                            targetTrackIndex = trackIndex;
-                            resultBitRate = format.bitrate;
-                        }
-                    }
-                }
-            }
-        }
-        if (targetGroupIndex != -1 && targetTrackIndex != -1) {
-            trackSelector.setSelectionOverride(rendererIndex, trackGroups,
-                    new DefaultTrackSelector.SelectionOverride(targetGroupIndex, targetTrackIndex));
-        }
+        DefaultTrackSelector.Parameters params = trackSelector.buildUponParameters().setMaxVideoBitrate(bitRate).build();
+        trackSelector.setParameters(params);
     }
 
     private void updatePlaybackRate() {
