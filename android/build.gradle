@@ -21,6 +21,7 @@ allprojects {
         }
         maven {
             url 'http://repo.brightcove.com/releases'
+            allowInsecureProtocol = true
         }
         maven {
             url 'https://maven.google.com'
