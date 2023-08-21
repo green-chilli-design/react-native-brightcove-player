@@ -79,6 +79,10 @@ public class BrightcovePlayerPosterView extends RelativeLayout implements Lifecy
     }
 
     private void loadPoster() {
+        if (this.accountId == null || this.policyKey == null) {
+            this.imageView.setImageResource(android.R.color.transparent);
+            return;
+        }
         if (this.videoToken != null && !this.videoToken.equals("")) {
             this.offlineCatalog = new OfflineCatalog(this.context, DefaultEventEmitter.sharedEventEmitter, this.accountId, this.policyKey);
             Video video = this.offlineCatalog.findOfflineVideoById(this.videoToken);
@@ -100,6 +104,10 @@ public class BrightcovePlayerPosterView extends RelativeLayout implements Lifecy
     }
 
     private void loadImage(Video video) {
+        if (accountId == null || policyKey == null) {
+            this.imageView.setImageResource(android.R.color.transparent);
+            return;
+        }
         if (video == null) {
             this.imageView.setImageResource(android.R.color.transparent);
             return;
