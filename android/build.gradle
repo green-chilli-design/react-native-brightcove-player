@@ -33,6 +33,7 @@ allprojects {
 apply plugin: 'com.android.library'
 
 android {
+    namespace "jp.manse"
     compileSdkVersion 30
     buildToolsVersion = '30.0.2'
 
